@@ -5,17 +5,23 @@ import (
 	"net/http"
 	"short-link/configs"
 	"short-link/internal/auth"
-	"short-link/internal/hello"
+	"short-link/internal/link"
+	"short-link/pkg/db"
 )
 
 func main() {
 
 	conf := configs.LoadConfig()
 
+	dbConn := db.NewDb(conf)
 	router := http.NewServeMux()
-	hello.NewHelloHandler(router)
-	auth.NewAuthHandler(router, auth.AuthHandlerDeps{Config: conf})
 
+	//	Repositories
+	linkRepository := link.NewLinkRepository(dbConn)
+
+	// Handlers
+	auth.NewAuthHandler(router, auth.AuthHandlerDeps{Config: conf})
+	link.NewLinkHandler(router, link.LinkHandlerDeps{LinkRepository: linkRepository})
 	server := http.Server{
 		Addr:    ":8081",
 		Handler: router,
