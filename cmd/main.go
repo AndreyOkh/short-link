@@ -7,6 +7,7 @@ import (
 	"short-link/internal/auth"
 	"short-link/internal/link"
 	"short-link/pkg/db"
+	"short-link/pkg/middleware"
 )
 
 func main() {
@@ -24,7 +25,7 @@ func main() {
 	link.NewLinkHandler(router, link.LinkHandlerDeps{LinkRepository: linkRepository})
 	server := http.Server{
 		Addr:    ":8081",
-		Handler: router,
+		Handler: middleware.Logging(router),
 	}
 
 	fmt.Println("Server run")
