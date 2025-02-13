@@ -80,11 +80,8 @@ func (handler *LinkHandler) delete() http.HandlerFunc {
 			res.Json(w, "invalid id: "+err.Error(), http.StatusBadRequest)
 			return
 		}
-		if err := handler.LinkRepository.DeleteByID(id); err != nil && err.Error() != "record not found" {
-			res.Json(w, "error deleting link: "+err.Error(), http.StatusInternalServerError)
-			return
-		} else if err.Error() == "record not found" {
-			res.Json(w, "error deleting link: "+err.Error(), http.StatusBadRequest)
+		if err := handler.LinkRepository.DeleteByID(id); err != nil {
+			res.Json(w, "error deleting link: "+err.Error(), http.StatusNotFound)
 			return
 		}
 		res.Json(w, "link deleted", http.StatusOK)

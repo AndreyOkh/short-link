@@ -32,7 +32,7 @@ func (repo *LinkRepository) FindByHash(hash string) (*Link, error) {
 }
 
 func (repo *LinkRepository) DeleteByID(linkID uint64) error {
-	err := repo.CheckExistByID(linkID)
+	_, err := repo.CheckExistByID(linkID)
 	if err != nil {
 		return err
 	} else {
@@ -51,11 +51,11 @@ func (repo *LinkRepository) Update(link *Link) (*Link, error) {
 	return link, nil
 }
 
-func (repo *LinkRepository) CheckExistByID(linkID uint64) error {
-	result := repo.Database.DB.Model(Link{}).Where("id = ?", linkID).First(&Link{})
+func (repo *LinkRepository) CheckExistByID(linkID uint64) (*Link, error) {
+	var link Link
+	result := repo.Database.DB.First(&link, uint(linkID))
 	if result.Error != nil {
-		return result.Error
-	} else {
-		return nil
+		return nil, result.Error
 	}
+	return &link, nil
 }
