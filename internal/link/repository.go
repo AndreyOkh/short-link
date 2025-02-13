@@ -1,6 +1,7 @@
 package link
 
 import (
+	"gorm.io/gorm/clause"
 	"short-link/pkg/db"
 )
 
@@ -30,10 +31,31 @@ func (repo *LinkRepository) FindByHash(hash string) (*Link, error) {
 	return &link, nil
 }
 
-func (repo *LinkRepository) DeleteByID(linkID int) error {
-	result := repo.Database.DB.Delete(&Link{}, linkID)
+func (repo *LinkRepository) DeleteByID(linkID uint64) error {
+	err := repo.CheckExistByID(linkID)
+	if err != nil {
+		return err
+	} else {
+		result := repo.Database.DB.Delete(&Link{}, linkID)
+		if result.Error != nil {
+			return result.Error
+		}
+		return nil
+	}
+}
+
+func (repo *LinkRepository) Update(link *Link) (*Link, error) {
+	if result := repo.Database.DB.Clauses(clause.Returning{}).Updates(&link); result.Error != nil {
+		return nil, result.Error
+	}
+	return link, nil
+}
+
+func (repo *LinkRepository) CheckExistByID(linkID uint64) error {
+	result := repo.Database.DB.Model(Link{}).Where("id = ?", linkID).First(&Link{})
 	if result.Error != nil {
 		return result.Error
+	} else {
+		return nil
 	}
-	return nil
 }
