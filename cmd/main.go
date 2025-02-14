@@ -20,12 +20,18 @@ func main() {
 	//	Repositories
 	linkRepository := link.NewLinkRepository(dbConn)
 
+	// Middlewares
+	stack := middleware.Chain(
+		middleware.CORS,
+		middleware.Logging,
+	)
+
 	// Handlers
 	auth.NewAuthHandler(router, auth.AuthHandlerDeps{Config: conf})
 	link.NewLinkHandler(router, link.LinkHandlerDeps{LinkRepository: linkRepository})
 	server := http.Server{
 		Addr:    ":8081",
-		Handler: middleware.Logging(router),
+		Handler: stack(router),
 	}
 
 	fmt.Println("Server run")
