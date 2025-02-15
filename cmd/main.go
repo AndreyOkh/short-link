@@ -6,6 +6,7 @@ import (
 	"short-link/configs"
 	"short-link/internal/auth"
 	"short-link/internal/link"
+	"short-link/internal/user"
 	"short-link/pkg/db"
 	"short-link/pkg/middleware"
 )
@@ -19,6 +20,10 @@ func main() {
 
 	//	Repositories
 	linkRepository := link.NewLinkRepository(dbConn)
+	userRepository := user.NewUserRepository(dbConn)
+
+	// Services
+	authService := auth.NewAuthService(userRepository)
 
 	// Middlewares
 	stack := middleware.Chain(
@@ -27,7 +32,10 @@ func main() {
 	)
 
 	// Handlers
-	auth.NewAuthHandler(router, auth.AuthHandlerDeps{Config: conf})
+	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
+		Config:      conf,
+		AuthService: authService,
+	})
 	link.NewLinkHandler(router, link.LinkHandlerDeps{LinkRepository: linkRepository})
 	server := http.Server{
 		Addr:    ":8081",
