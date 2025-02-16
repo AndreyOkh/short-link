@@ -59,3 +59,26 @@ func (repo *LinkRepository) CheckExistByID(linkID uint64) (*Link, error) {
 	}
 	return &link, nil
 }
+
+func (repo *LinkRepository) Count() (int64, error) {
+	var count int64
+	result := repo.Database.
+		Table("links").
+		Where("deleted_at IS NULL").
+		Count(&count)
+
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return count, nil
+}
+
+func (repo *LinkRepository) GetLinks(offset, limit int) ([]Link, error) {
+	var links []Link
+	result := repo.Database.DB.Offset(offset).Limit(limit).Order("id").Find(&links)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return links, nil
+}
