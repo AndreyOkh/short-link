@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+const (
+	GroupByDay   = "day"
+	GroupByMonth = "month"
+)
+
 type StatHandler struct {
 	StatRepository *StatRepository
 }
@@ -37,12 +42,12 @@ func (handler *StatHandler) getStat() http.HandlerFunc {
 			res.Json(w, "invalid 'to' param: "+err.Error(), http.StatusBadRequest)
 			return
 		}
-		//byParam := r.URL.Query().Get("by")
-		//if !(byParam == "month") && !(byParam == "day") {
-		//	res.Json(w, "invalid 'by' param, use only 'day' or 'month': "+err.Error(), http.StatusBadRequest)
-		//	return
-		//}
-		clicks := handler.StatRepository.GetClicks(fromParam, toParam)
+		byParam := r.URL.Query().Get("by")
+		if !(byParam == GroupByMonth) && !(byParam == GroupByDay) {
+			res.Json(w, "invalid 'by' param, use only 'day' or 'month': "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		clicks := handler.StatRepository.GetStats(byParam, fromParam, toParam)
 		res.Json(w, clicks, http.StatusOK)
 	}
 }
