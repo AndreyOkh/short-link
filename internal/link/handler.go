@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 	"net/http"
 	"short-link/configs"
+	"short-link/pkg/event"
 	"short-link/pkg/middleware"
 	"short-link/pkg/req"
 	"short-link/pkg/res"
@@ -13,15 +14,20 @@ import (
 
 type LinkHandler struct {
 	LinkRepository *LinkRepository
+	EventBus       *event.EventBus
 }
 
 type LinkHandlerDeps struct {
 	LinkRepository *LinkRepository
 	Config         *configs.Config
+	EventBus       *event.EventBus
 }
 
 func NewLinkHandler(router *http.ServeMux, deps LinkHandlerDeps) {
-	handler := &LinkHandler{LinkRepository: deps.LinkRepository}
+	handler := &LinkHandler{
+		LinkRepository: deps.LinkRepository,
+		EventBus:       deps.EventBus,
+	}
 
 	router.Handle("POST /link", middleware.IsAuthed(handler.create(), deps.Config))
 	router.Handle("PATCH /link/{id}", middleware.IsAuthed(handler.update(), deps.Config))
@@ -106,6 +112,11 @@ func (handler *LinkHandler) get() http.HandlerFunc {
 			res.Json(w, "error getting link: "+err.Error(), http.StatusNotFound)
 			return
 		}
+		//handler.StatRepository.AddClick(link.ID)
+		go handler.EventBus.Publish(event.Event{
+			Type: event.LinkVisitedEvent,
+			Data: link.ID,
+		})
 		http.Redirect(w, r, link.URL, http.StatusTemporaryRedirect)
 	}
 }

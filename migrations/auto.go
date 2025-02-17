@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"short-link/internal/link"
+	"short-link/internal/stat"
 	"short-link/internal/user"
 )
 
@@ -19,7 +20,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	if err := db.AutoMigrate(&link.Link{}, &user.User{}); err != nil {
+	err = db.AutoMigrate(&link.Link{}, &user.User{}, &stat.Stat{})
+	if err != nil {
 		log.Fatal(err)
 	}
 }
