@@ -17,3 +17,8 @@ type DeleteRequest struct{}
 type DeleteResponse struct{}
 type GetRequest struct{}
 type GetResponse struct{}
+
+type GetAllLinkResponse struct {
+	Count int64  `json:"count"`
+	Links []Link `json:"links"`
+}

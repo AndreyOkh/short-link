@@ -23,10 +23,11 @@ type LinkHandlerDeps struct {
 func NewLinkHandler(router *http.ServeMux, deps LinkHandlerDeps) {
 	handler := &LinkHandler{LinkRepository: deps.LinkRepository}
 
-	router.HandleFunc("POST /link", handler.create())
+	router.Handle("POST /link", middleware.IsAuthed(handler.create(), deps.Config))
 	router.Handle("PATCH /link/{id}", middleware.IsAuthed(handler.update(), deps.Config))
-	router.HandleFunc("DELETE /link/{id}", handler.delete())
+	router.Handle("DELETE /link/{id}", middleware.IsAuthed(handler.delete(), deps.Config))
 	router.HandleFunc("GET /{hash}", handler.get())
+	router.Handle("GET /link", middleware.IsAuthed(handler.getAll(), deps.Config))
 }
 
 func (handler *LinkHandler) create() http.HandlerFunc {
@@ -106,5 +107,35 @@ func (handler *LinkHandler) get() http.HandlerFunc {
 			return
 		}
 		http.Redirect(w, r, link.URL, http.StatusTemporaryRedirect)
+	}
+}
+
+func (handler *LinkHandler) getAll() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+		if err != nil {
+			res.Json(w, "invalid limit: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
+		if err != nil {
+			res.Json(w, "invalid offset: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		links, err := handler.LinkRepository.GetLinks(offset, limit)
+		if err != nil {
+			res.Json(w, "error getting links: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+		countLinks, err := handler.LinkRepository.Count()
+		if err != nil {
+			res.Json(w, "error getting links: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+		response := &GetAllLinkResponse{
+			Count: countLinks,
+			Links: links,
+		}
+		res.Json(w, response, http.StatusOK)
 	}
 }
