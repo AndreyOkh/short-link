@@ -13,8 +13,7 @@ import (
 	"short-link/pkg/middleware"
 )
 
-func main() {
-
+func App() http.Handler {
 	conf := configs.LoadConfig()
 
 	dbConn := db.NewDb(conf)
@@ -34,12 +33,6 @@ func main() {
 		StatRepository: statRepository,
 	})
 
-	// Middlewares
-	stack := middleware.Chain(
-		middleware.CORS,
-		middleware.Logging,
-	)
-
 	// Handlers
 	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
 		Config:      conf,
@@ -56,12 +49,25 @@ func main() {
 		Config:         conf,
 	})
 
+	go statService.AddClick()
+
+	// Middlewares
+	stack := middleware.Chain(
+		middleware.CORS,
+		middleware.Logging,
+	)
+
+	return stack(router)
+}
+
+func main() {
+
+	app := App()
 	server := http.Server{
 		Addr:    ":8081",
-		Handler: stack(router),
+		Handler: app,
 	}
 
-	go statService.AddClick()
 	fmt.Println("Server run")
 	if err := server.ListenAndServe(); err != nil {
 		panic(err)
