@@ -6,6 +6,7 @@ import (
 	"short-link/configs"
 	"short-link/internal/auth"
 	"short-link/internal/link"
+	"short-link/internal/pages"
 	"short-link/internal/stat"
 	"short-link/internal/user"
 	"short-link/pkg/db"
@@ -48,6 +49,7 @@ func App() http.Handler {
 		StatRepository: statRepository,
 		Config:         conf,
 	})
+	pages.NewHandler(router)
 
 	go statService.AddClick()
 

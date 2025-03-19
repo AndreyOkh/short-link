@@ -1,0 +1,7 @@
+package views
+
+templ ShortUrl(url, text string) {
+    <div id="form-result">
+        <a href={templ.SafeURL(url)} target="_blank">{text}</a>
+    </div>
+}

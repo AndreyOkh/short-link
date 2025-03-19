@@ -1,7 +1,7 @@
 package link
 
 type CreateRequest struct {
-	URL string `json:"url" validate:"required,url"`
+	URL string `json:"url" validate:"required,url" schema:"url"`
 }
 
 type CreateResponse struct {

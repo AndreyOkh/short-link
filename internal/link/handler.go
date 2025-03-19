@@ -1,14 +1,17 @@
 package link
 
 import (
+	"context"
 	"fmt"
 	"gorm.io/gorm"
+	"io"
 	"net/http"
 	"short-link/configs"
 	"short-link/pkg/event"
 	"short-link/pkg/middleware"
 	"short-link/pkg/req"
 	"short-link/pkg/res"
+	"short-link/views"
 	"strconv"
 )
 
@@ -29,7 +32,8 @@ func NewLinkHandler(router *http.ServeMux, deps LinkHandlerDeps) {
 		EventBus:       deps.EventBus,
 	}
 
-	router.Handle("POST /link", middleware.IsAuthed(handler.create(), deps.Config))
+	//router.Handle("POST /link", middleware.IsAuthed(handler.create(), deps.Config))
+	router.HandleFunc("POST /link", handler.create())
 	router.Handle("PATCH /link/{id}", middleware.IsAuthed(handler.update(), deps.Config))
 	router.Handle("DELETE /link/{id}", middleware.IsAuthed(handler.delete(), deps.Config))
 	router.HandleFunc("GET /{hash}", handler.get())
@@ -55,7 +59,15 @@ func (handler *LinkHandler) create() http.HandlerFunc {
 			res.Json(w, "error creating link: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
-		res.Json(w, createdLink, http.StatusCreated)
+
+		shortUrl := r.Host + "/" + createdLink.Hash
+		component := views.ShortUrl(createdLink.Hash, shortUrl)
+		var render io.Writer = w
+		err = component.Render(context.Background(), render)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+		//res.Json(w, createdLink, http.StatusCreated)
 	}
 }
 
