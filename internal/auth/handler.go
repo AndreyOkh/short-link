@@ -1,12 +1,15 @@
 package auth
 
 import (
+	"context"
+	"io"
 	"log"
 	"net/http"
 	"short-link/configs"
 	"short-link/pkg/jwt"
 	"short-link/pkg/req"
 	"short-link/pkg/res"
+	page "short-link/views/pages"
 )
 
 type AuthHandler struct {
@@ -26,6 +29,18 @@ func NewAuthHandler(router *http.ServeMux, deps AuthHandlerDeps) {
 	}
 	router.HandleFunc("POST /auth/login", handler.Login())
 	router.HandleFunc("POST /auth/register", handler.Register())
+	router.HandleFunc("GET /auth", handler.AuthPage())
+}
+
+func (handler *AuthHandler) AuthPage() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		component := page.Auth()
+		var render io.Writer = w
+		err := component.Render(context.Background(), render)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}
 }
 
 func (handler *AuthHandler) Login() http.HandlerFunc {
@@ -51,6 +66,12 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 		data := LoginResponse{
 			Token: token,
 		}
+		//w.Header().Set("Authorization", "Bearer "+token)
+		http.SetCookie(w, &http.Cookie{
+			Name:  "Authorization",
+			Value: "Bearer " + token,
+			Path:  "/",
+		})
 		res.Json(w, data, http.StatusOK)
 	}
 }

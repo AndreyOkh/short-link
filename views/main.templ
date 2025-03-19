@@ -25,15 +25,7 @@ templ Main() {
                 <circle cx="80" cy="50" r="4" fill="#aaa" />
             </svg>
         </div>
-        <h1>Сокращатель ссылок</h1>
-        <form hx-post="/link"
-              hx-trigger="submit"
-              hx-target="#result"
-        >
-            <input name="url" type="text" id="longUrl" placeholder="Вставьте ссылку">
-            <button id="shortenButton" type="submit">Сократить</button>
-            <div id="result"></div>
-        </form>
+        { children... }
     </div>
     </body>
     </html>
@@ -69,27 +61,6 @@ templ MainStyle() {
         .input-group {
             display: flex;
             margin-bottom: 20px;
-        }
-
-        input[type="text"] {
-            flex-grow: 1;
-            padding: 14px 20px;
-            border: 1px solid #444;
-            border-radius: 8px 0 0 8px;
-            background-color: #333;
-            color: #e0e0e0;
-            font-size: 16px;
-        }
-
-        button {
-            padding: 14px 30px;
-            border: none;
-            border-radius: 0 8px 8px 0;
-            background-color: #64b5f6;
-            color: #1a1a1a;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
         button:hover {

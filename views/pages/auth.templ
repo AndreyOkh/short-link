@@ -1,0 +1,52 @@
+package page
+
+import "short-link/views"
+
+templ Auth() {
+	@AuthStyle()
+	@views.Main() {
+		<h1>Авторизация</h1>
+		<form hx-post="/auth/login"
+			  hx-trigger="submit"
+			  hx-target="#result"
+		>
+			<input name="email" type="text" id="longUrl" placeholder="e-main">
+			<input name="password" type="password" id="longUrl" placeholder="Пароль">
+			<button id="shortenButton" type="submit">Войти</button>
+			<div id="result"></div>
+		</form>
+	}
+}
+
+templ AuthStyle() {
+	<style>
+		form {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		input {
+			flex-grow: 1;
+			padding: 14px 20px;
+			border: 1px solid #444;
+			border-radius: 8px;
+			background-color: #333;
+			color: #e0e0e0;
+			font-size: 16px;
+		}
+
+        button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            background-color: #64b5f6;
+            color: #1a1a1a;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+	</style>
+}
