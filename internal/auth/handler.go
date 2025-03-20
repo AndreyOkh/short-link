@@ -9,7 +9,7 @@ import (
 	"short-link/pkg/jwt"
 	"short-link/pkg/req"
 	"short-link/pkg/res"
-	page "short-link/views/pages"
+	page "short-link/views/page"
 )
 
 type AuthHandler struct {

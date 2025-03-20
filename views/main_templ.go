@@ -33,7 +33,15 @@ func Main() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html><head><meta charset=\"UTF-8\"><title>Сокращатель ссылок</title><script src=\"https://unpkg.com/htmx.org@2.0.4\"></script></head><body><div class=\"container\"><div class=\"logo\"><svg width=\"100\" height=\"100\" viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\"><defs><linearGradient id=\"grad1\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\"><stop offset=\"0%\" style=\"stop-color:#ccc;stop-opacity:1\"></stop> <stop offset=\"100%\" style=\"stop-color:#999;stop-opacity:1\"></stop></linearGradient></defs> <path d=\"M 20 50 C 20 20, 50 20, 50 50 S 80 80, 80 50 C 80 20, 50 20, 50 50\" stroke=\"url(#grad1)\" stroke-width=\"8\" fill=\"none\" stroke-linecap=\"round\"></path> <circle cx=\"20\" cy=\"50\" r=\"4\" fill=\"#aaa\"></circle> <circle cx=\"50\" cy=\"25\" r=\"3\" fill=\"#aaa\"></circle> <circle cx=\"80\" cy=\"50\" r=\"4\" fill=\"#aaa\"></circle></svg></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html><head><meta charset=\"UTF-8\"><title>Сокращатель ссылок</title><script src=\"https://unpkg.com/htmx.org@2.0.4\"></script></head><body>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = Header(true).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"main\"><div class=\"container\"><div class=\"logo\"><svg width=\"100\" height=\"100\" viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\"><defs><linearGradient id=\"grad1\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\"><stop offset=\"0%\" style=\"stop-color:#ccc;stop-opacity:1\"></stop> <stop offset=\"100%\" style=\"stop-color:#999;stop-opacity:1\"></stop></linearGradient></defs> <path d=\"M 20 50 C 20 20, 50 20, 50 50 S 80 80, 80 50 C 80 20, 50 20, 50 50\" stroke=\"url(#grad1)\" stroke-width=\"8\" fill=\"none\" stroke-linecap=\"round\"></path> <circle cx=\"20\" cy=\"50\" r=\"4\" fill=\"#aaa\"></circle> <circle cx=\"50\" cy=\"25\" r=\"3\" fill=\"#aaa\"></circle> <circle cx=\"80\" cy=\"50\" r=\"4\" fill=\"#aaa\"></circle></svg></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -41,7 +49,7 @@ func Main() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -70,7 +78,97 @@ func MainStyle() templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<style>\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            height: 100vh;\n            margin: 0;\n            background-color: #1a1a1a;\n            color: #e0e0e0;\n        }\n\n        .container {\n            text-align: center;\n            padding: 40px;\n            border-radius: 12px;\n            background-color: #252525;\n            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);\n            width: 450px;\n        }\n\n        .logo img {\n            width: 120px;\n            margin-bottom: 30px;\n        }\n\n        .input-group {\n            display: flex;\n            margin-bottom: 20px;\n        }\n\n        button:hover {\n            background-color: #42a5f5;\n        }\n\n        #result {\n            margin-top: 30px;\n            font-size: 18px;\n            font-weight: 600;\n            color: #64b5f6;\n        }\n\n        a {\n            color: #64b5f6;\n            text-decoration: none;\n        }\n\n        a:hover {\n            text-decoration: underline;\n        }\n    </style>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<style>\n        body {\n            background-color: #1a1a1a;\n            color: #e0e0e0;\n            margin: auto;\n        }\n        .main {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            height: 100vh;\n            margin: 0;\n        }\n\n        .container {\n            text-align: center;\n            padding: 40px;\n            border-radius: 12px;\n            background-color: #252525;\n            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);\n            width: 450px;\n        }\n\n        .logo img {\n            width: 120px;\n            margin-bottom: 30px;\n        }\n\n        .input-group {\n            display: flex;\n            margin-bottom: 20px;\n        }\n\n        button:hover {\n            background-color: #42a5f5;\n        }\n\n        #result {\n            margin-top: 30px;\n            font-size: 18px;\n            font-weight: 600;\n            color: #64b5f6;\n        }\n\n        a {\n            color: #64b5f6;\n            text-decoration: none;\n        }\n\n        a:hover {\n            text-decoration: underline;\n        }\n    </style>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func Header(isAuthed bool) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var3 == nil {
+			templ_7745c5c3_Var3 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = HeaderStyle().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div class=\"header\"><div class=\"left-group\"><a class=\"heder_link\" href=\"/\">Главная</a> <a class=\"heder_link\" href=\"/link\">Ссылки</a> <a class=\"heder_link\" href=\"/stat\">Статистика</a></div><div class=\"right-group\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if isAuthed {
+			var templ_7745c5c3_Var4 = []any{"heder_link", "exit-link", templ.KV("authed", isAuthed)}
+			templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var4...)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<a class=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var5 string
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var4).String())
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/main.templ`, Line: 1, Col: 0}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" href=\"/\">Выход</a>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</div></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func HeaderStyle() templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var6 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var6 == nil {
+			templ_7745c5c3_Var6 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<style>\n    .header {\n\n        display: flex;\n        justify-content: space-between;\n        align-items: center;\n        margin: 30px auto;\n        max-width: 1200px;\n    }\n    .left-group {\n    }\n    .left-group a {\n        padding: 14px 30px;\n        border: none;\n        border-radius: 8px;\n        background-color: #64b5f6;\n        color: #1a1a1a;\n        font-size: 16px;\n        cursor: pointer;\n        transition: background-color 0.3s ease;\n    }\n</style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

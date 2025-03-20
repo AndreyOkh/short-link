@@ -137,13 +137,15 @@ func (handler *LinkHandler) getAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
 		if err != nil {
-			res.Json(w, "invalid limit: "+err.Error(), http.StatusBadRequest)
-			return
+			//res.Json(w, "invalid limit: "+err.Error(), http.StatusBadRequest)
+			//return
+			limit = 50
 		}
 		offset, err := strconv.Atoi(r.URL.Query().Get("offset"))
 		if err != nil {
-			res.Json(w, "invalid offset: "+err.Error(), http.StatusBadRequest)
-			return
+			//res.Json(w, "invalid offset: "+err.Error(), http.StatusBadRequest)
+			//return
+			offset = 0
 		}
 		links, err := handler.LinkRepository.GetLinks(offset, limit)
 		if err != nil {

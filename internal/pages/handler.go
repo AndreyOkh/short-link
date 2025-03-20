@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 	"net/http"
-	page "short-link/views/pages"
+	page "short-link/views/page"
 )
 
 type Handler struct{}
